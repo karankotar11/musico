@@ -72,9 +72,9 @@ const MusicLibrary = ({ musicList, handleFavoriteToggle }: Props) => {
                                     }}
                                 >
                                     {music.pin === 1 ? (
-                                        <img src="favorite.svg" alt="fav Icon" width={25} />
+                                        <img src="./favorite.svg" alt="fav Icon" width={25} />
                                     ) : (
-                                        <img src="notfavorite.svg" alt="fav Icon" width={25} />
+                                        <img src="./notfavorite.svg" alt="fav Icon" width={25} />
                                     )}
                                 </button>
                             </div>
