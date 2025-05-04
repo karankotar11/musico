@@ -160,7 +160,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ track, autoPlay = false, prev
 
         >
             <button className="sm:hidden absolute top-[-20px] w-12 flex justify-center rounded-t-xl left-1/2 -translate-x-1/2 bg-[#3b3939]" onClick={() => setFullView((prev) => !prev)}>
-                { !fullView ? <img src="arrowtop.svg" alt="Next Icon" width={20} />:<img src="arrowdown.svg" alt="Next Icon" width={20} />}
+                { !fullView ? <img src="./arrowtop.svg" alt="Next Icon" width={20} />:<img src="./arrowdown.svg" alt="Next Icon" width={20} />}
             </button>
             <audio ref={audioRef} src={track.music_url} preload="metadata" />
             <div className="flex flex-row gap-2 justify-start items-start">
@@ -187,11 +187,11 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ track, autoPlay = false, prev
                 </div>
                 <div className="flex justify-center gap-5 mt-5">
                     <button onClick={previous} className="">
-                        <img src="previous.svg" alt="Next Icon" width={30} />
+                        <img src="./previous.svg" alt="Next Icon" width={30} />
                     </button>
-                    <button onClick={togglePlay} className="text-pink-400" >{isPlaying ? <img src="pause.svg" alt="Next Icon" width={25} /> : <img src="play.svg" alt="Next Icon" width={25} />}</button>
+                    <button onClick={togglePlay} className="text-pink-400" >{isPlaying ? <img src="./pause.svg" alt="Next Icon" width={25} /> : <img src="./play.svg" alt="Next Icon" width={25} />}</button>
                     <button onClick={next}>
-                        <img src="next.svg" alt="Next Icon" width={30} />
+                        <img src="./next.svg" alt="Next Icon" width={30} />
                     </button>
 
 
