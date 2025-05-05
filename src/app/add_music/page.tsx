@@ -204,7 +204,7 @@ export default function AddMusicPage() {
                     id="audioUpload"
                     multiple
                     type="file"
-                    accept="audio/*"
+                    accept=".mp3,audio/mpeg"
                     className="hidden"
                     onChange={(e) => {
                         const selectedFiles = Array.from(e.target.files || []);
