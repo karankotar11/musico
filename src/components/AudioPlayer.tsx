@@ -24,6 +24,9 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ track, autoPlay = false, prev
     const [fullView, setFullView] = useState<boolean>(true);
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
+    const [mediaSource, setMediaSource] = useState<MediaSource | null>(null);
+    const [sourceBuffer, setSourceBuffer] = useState<SourceBuffer | null>(null);
+    const [loaded, setLoaded] = useState<boolean>(false);
 
     useEffect(() => {
         const audio = audioRef.current;
@@ -43,6 +46,8 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ track, autoPlay = false, prev
             setIsPlaying(false);
             next(); // Call next when audio ends
         };
+
+        
 
 
         audio.addEventListener("loadedmetadata", onLoadedMetadata);
@@ -75,6 +80,48 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ track, autoPlay = false, prev
         setIsPlaying(autoPlay)
 
     }, [track])
+
+
+    useEffect(() => {
+        const source = new MediaSource();
+        setMediaSource(source);
+        if (audioRef.current) {
+            audioRef.current.src = URL.createObjectURL(source);
+        }
+
+        source.addEventListener("sourceopen", () => {
+            const buffer = source.addSourceBuffer('audio/mpeg');
+            setSourceBuffer(buffer);
+            buffer.addEventListener("updateend", () => {
+                if (!loaded) {
+                    fetchNextChunk();
+                }
+            });
+        });
+
+        return () => {
+            if (audioRef.current) {
+                URL.revokeObjectURL(audioRef.current.src);
+            }
+        };
+    }, []);
+
+    const fetchNextChunk = (startByte: number = 0) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', track.music_url, true);
+        xhr.setRequestHeader('Range', `bytes=${startByte}-${startByte + 1024 * 1024 - 1}`); // 1MB chunk
+        xhr.responseType = 'arraybuffer';
+        xhr.onload = () => {
+            if (xhr.status === 206) {
+                const buffer = xhr.response;
+                if (sourceBuffer && !sourceBuffer.updating) {
+                    sourceBuffer.appendBuffer(buffer);
+                }
+                setLoaded(true);
+            }
+        };
+        xhr.send();
+    };
 
     const togglePlay = () => {
         if (!audioRef.current) return;
